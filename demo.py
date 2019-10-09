@@ -19,11 +19,12 @@ configurations = {
         lr=1.0e-1,
         momentum=0.9,
         weight_decay=0.0,
-        gamma=0.1, # "lr_policy: step"
-        step_size=1000000, # "lr_policy: step"
+        gamma=0.1,  # "lr_policy: step"
+        step_size=1000000,  # "lr_policy: step"
         interval_validate=1000,
     ),
 }
+
 
 def get_parameters(model, bias=False):
     for k, m in model._modules.items():
@@ -33,11 +34,13 @@ def get_parameters(model, bias=False):
             else:
                 yield m.weight
 
+
 N_IDENTITY = 8631  # the number of identities in VGGFace2 for which ResNet and SENet are trained
+
 
 def main():
     parser = argparse.ArgumentParser("PyTorch Face Recognizer")
-    parser.add_argument('cmd', type=str,  choices=['train', 'test', 'extract'], help='train, test or extract')
+    parser.add_argument('cmd', type=str, choices=['train', 'test', 'extract'], help='train, test or extract')
     parser.add_argument('--arch_type', type=str, default='resnet50_ft', help='model type',
                         choices=['resnet50_ft', 'senet50_ft', 'resnet50_scratch', 'senet50_scratch'])
     parser.add_argument('--dataset_dir', type=str, default='/path/to/dataset_directory', help='dataset directory')
@@ -59,7 +62,7 @@ def main():
     parser.add_argument('--gpu', type=int, default=0)
     parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                         help='number of data loading workers (default: 4)')
-    parser.add_argument('--horizontal_flip', action='store_true', 
+    parser.add_argument('--horizontal_flip', action='store_true',
                         help='horizontally flip images specified in test_img_list_file')
     args = parser.parse_args()
     print(args)
@@ -143,10 +146,10 @@ def main():
             weight_decay=cfg['weight_decay'])
         if resume:
             optim.load_state_dict(checkpoint['optim_state_dict'])
-    
+
         # lr_policy: step
         last_epoch = start_iteration if resume else -1
-        lr_scheduler = torch.optim.lr_scheduler.StepLR(optim,  cfg['step_size'],
+        lr_scheduler = torch.optim.lr_scheduler.StepLR(optim, cfg['step_size'],
                                                        gamma=cfg['gamma'], last_epoch=last_epoch)
 
     if args.cmd == 'train':

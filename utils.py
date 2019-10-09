@@ -6,6 +6,7 @@ import torch
 import shutil
 import pickle
 
+
 def load_state_dict(model, fname):
     """
     Set parameters converted from Caffe models authors of VGGFace2 provide.
@@ -24,8 +25,9 @@ def load_state_dict(model, fname):
             try:
                 own_state[name].copy_(torch.from_numpy(param))
             except Exception:
-                raise RuntimeError('While copying the parameter named {}, whose dimensions in the model are {} and whose '\
-                                   'dimensions in the checkpoint are {}.'.format(name, own_state[name].size(), param.size()))
+                raise RuntimeError(
+                    'While copying the parameter named {}, whose dimensions in the model are {} and whose ' \
+                    'dimensions in the checkpoint are {}.'.format(name, own_state[name].size(), param.size()))
         else:
             raise KeyError('unexpected key "{}" in state_dict'.format(name))
 
@@ -47,6 +49,7 @@ def get_id_label_map(meta_file):
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
+
     def __init__(self):
         self.reset()
 
